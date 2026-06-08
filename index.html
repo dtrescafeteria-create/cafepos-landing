@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CafePOS — Sistema POS para cafeterías</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #7C3AED;
+    --purple-light: #a78bfa;
+    --purple-dark: #4c1d95;
+    --bg: #0a0a12;
+    --bg2: #111122;
+    --bg3: #1a1a2e;
+    --text: #f0f0f8;
+    --muted: #888899;
+    --border: rgba(124,58,237,0.2);
+    --brown: #6B3A1F;
+    --brown-light: #c47a3a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2.5rem;
+    background: rgba(10,10,18,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-logo span { color: var(--purple-light); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.4);
+    color: var(--purple-light);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--purple-light);
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 4rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--purple);
+    color: white;
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.2s, transform 0.15s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover { background: #6d28d9; transform: translateY(-2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: transparent;
+    color: var(--text);
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
+
+  .btn-icon { font-size: 1.1rem; }
+
+  /* MOCKUP */
+  .hero-mockup {
+    width: 100%;
+    max-width: 900px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,58,237,0.1);
+  }
+
+  .mockup-bar {
+    background: var(--purple);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mockup-bar-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mockup-connected {
+    background: #059669;
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mockup-tabs {
+    display: flex;
+    border-bottom: 1px solid #2a2a3e;
+  }
+
+  .mockup-tab {
+    flex: 1;
+    padding: 0.7rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+  }
+
+  .mockup-tab.active {
+    color: var(--purple-light);
+    border-bottom-color: var(--purple);
+    background: rgba(124,58,237,0.05);
+  }
+
+  .mockup-body { padding: 1rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+
+  .mockup-mesa {
+    background: #0f0f1a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .mockup-mesa.activa {
+    background: #1a3a2a;
+    border-color: #059669;
+  }
+
+  .mockup-mesa .estado {
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 3px;
+    font-weight: 400;
+  }
+
+  .mockup-mesa.activa .estado { color: #059669; }
+
+  /* FEATURES */
+  .features {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--purple-light);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    max-width: 600px;
+  }
+
+  .section-subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-bottom: 3.5rem;
+    font-weight: 300;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(124,58,237,0.5);
+    transform: translateY(-4px);
+  }
+
+  .feature-icon {
+    width: 44px; height: 44px;
+    background: rgba(124,58,237,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-card p {
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* DOWNLOAD */
+  .download {
+    padding: 6rem 2rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .download-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .download-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .download-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .download-card:hover {
+    border-color: rgba(124,58,237,0.6);
+    transform: translateY(-4px);
+  }
+
+  .download-card .platform-icon {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .download-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .download-card p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .download-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .badge-version {
+    background: rgba(124,58,237,0.15);
+    color: var(--purple-light);
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  /* FLOW */
+  .flow {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0;
+    margin-top: 3rem;
+    position: relative;
+  }
+
+  .flow-step {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    position: relative;
+  }
+
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--purple);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .flow-num {
+    width: 48px; height: 48px;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--purple-light);
+    margin: 0 auto 1rem;
+  }
+
+  .flow-step h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .flow-step p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  footer p { color: var(--muted); font-size: 0.85rem; font-weight: 300; }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .footer-logo span { color: var(--purple-light); }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.25rem 3rem; }
+    .flow-step:not(:last-child)::after { display: none; }
+    footer { justify-content: center; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Cafe<span>POS</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Funciones</a></li>
+    <li><a href="#flujo">Cómo funciona</a></li>
+    <li><a href="#descarga">Descarga</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">⚡ Sistema POS para cafeterías</div>
+  <h1>Gestiona tu cafetería<br>en <em>tiempo real</em></h1>
+  <p>Pedidos, mesas, cocina y barra sincronizados al instante. Sin complicaciones, sin papeles, sin errores.</p>
+  <div class="hero-buttons">
+    <a href="#descarga" class="btn-primary"><span class="btn-icon">📱</span> Descargar app</a>
+    <a href="#features" class="btn-secondary"><span class="btn-icon">→</span> Ver funciones</a>
+  </div>
+
+  <div class="hero-mockup">
+    <div class="mockup-bar">
+      <div class="mockup-bar-title">🍽️ Terraza</div>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <div class="mockup-connected">● Conectado</div>
+        <div style="background:rgba(255,255,255,0.15);padding:3px 10px;border-radius:6px;font-size:0.75rem">Salir</div>
+      </div>
+    </div>
+    <div class="mockup-tabs">
+      <div class="mockup-tab active">🪑 Mesas</div>
+      <div class="mockup-tab">📋 Menú</div>
+      <div class="mockup-tab">📦 Pedidos</div>
+      <div class="mockup-tab">📋 Historial</div>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-mesa activa">M1<div class="estado">activo</div></div>
+      <div class="mockup-mesa activa">M2<div class="estado">activo</div></div>
+      <div class="mockup-mesa">M3<div class="estado">libre</div></div>
+      <div class="mockup-mesa">M4<div class="estado">libre</div></div>
+      <div class="mockup-mesa activa">M5<div class="estado">activo</div></div>
+      <div class="mockup-mesa">M6<div class="estado">libre</div></div>
+      <div class="mockup-mesa">M7<div class="estado">libre</div></div>
+      <div class="mockup-mesa activa">M8<div class="estado">activo</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label">Funcionalidades</div>
+  <h2 class="section-title">Todo lo que necesita tu cafetería</h2>
+  <p class="section-subtitle">Diseñado para ser simple y rápido. Sin curva de aprendizaje, listo desde el primer día.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Pedidos en tiempo real</h3>
+      <p>Los pedidos llegan al instante a cocina y barra vía WebSockets. Sin retrasos, sin confusiones.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🪑</div>
+      <h3>Gestión de mesas y salas</h3>
+      <p>Organiza tus espacios en salas con sus mesas. Ve de un vistazo qué mesas están ocupadas y cuáles libres.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Carta con modificadores</h3>
+      <p>Configura categorías, productos y modificadores. Los camareros pueden personalizar cada pedido al momento.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖨️</div>
+      <h3>Impresión ESC/POS</h3>
+      <p>Compatible con impresoras de red ESC/POS. Imprime tickets automáticamente en cocina o barra.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Historial del día</h3>
+      <p>Consulta todas las mesas cerradas en formato ticket. Reimprímelas en cualquier momento desde el historial.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <h3>Multiusuario con PIN</h3>
+      <p>Cada camarero accede con su PIN de 4 dígitos. Roles diferenciados: sala, cocina, barra y administración.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>PWA + App nativa</h3>
+      <p>Funciona en cualquier dispositivo desde el navegador. Disponible también como app Android e instalador Windows.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <h3>Notificaciones sonoras</h3>
+      <p>Cocina y barra reciben una alerta sonora con cada nuevo pedido. Sin perder ninguno.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <h3>Siempre en la nube</h3>
+      <p>Desplegado en Railway con base de datos PostgreSQL. Accede desde cualquier dispositivo de tu red.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FLUJO -->
+<section class="flow" id="flujo">
+  <div class="section-label">Flujo de trabajo</div>
+  <h2 class="section-title">Cómo funciona</h2>
+  <p class="section-subtitle">Un flujo pensado para ir al ritmo del servicio, sin pasos de más.</p>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <h4>Selecciona mesa</h4>
+      <p>El camarero elige sala y mesa desde su dispositivo</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <h4>Toma el pedido</h4>
+      <p>Añade productos, modificadores y notas al carrito</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <h4>Envía a cocina</h4>
+      <p>El pedido llega al instante con alerta sonora</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <h4>Listo y entregado</h4>
+      <p>Cocina marca listo, el camarero entrega y confirma</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <h4>Cobro y cierre</h4>
+      <p>Se cobra la mesa y queda libre para la siguiente reserva</p>
+    </div>
+  </div>
+</section>
+
+<!-- DESCARGA -->
+<section class="download" id="descarga">
+  <div class="download-inner">
+    <div class="section-label">Descargas</div>
+    <h2 class="section-title" style="margin:0 auto 1rem;max-width:none">Disponible en tu plataforma</h2>
+    <p class="section-subtitle" style="margin:0 auto 0;max-width:none">Instala CafePOS en cualquier dispositivo o accede directamente desde el navegador.</p>
+
+    <div class="download-cards">
+      <div class="download-card">
+        <div class="platform-icon">🤖</div>
+        <div class="badge-version">Android · APK</div>
+        <h3>App Android</h3>
+        <p>Instala la app nativa en tablets y móviles Android. Funciona a pantalla completa sin barra de navegador.</p>
+        <a href="app-release-signed.apk" class="btn-primary" download>
+          <span class="btn-icon">⬇️</span> Descargar APK
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="platform-icon">🪟</div>
+        <div class="badge-version">Windows · 64 bit</div>
+        <h3>App Windows</h3>
+        <p>Instalador para Windows 10/11 de 64 bits. Ideal para el ordenador de caja o mostrador.</p>
+        <a href="CafePOS Setup 1.0.0.exe" class="btn-primary" download>
+          <span class="btn-icon">⬇️</span> Descargar .exe
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="platform-icon">🌐</div>
+        <div class="badge-version">Web · PWA</div>
+        <h3>Versión web</h3>
+        <p>Accede desde cualquier navegador sin instalación. Compatible con iOS, Android, Windows y Mac.</p>
+        <a href="https://cafeteria-pos-pwa-production.up.railway.app" class="btn-primary" target="_blank">
+          <span class="btn-icon">→</span> Abrir en web
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Cafe<span>POS</span></div>
+  <p>Sistema POS para pequeñas cafeterías · Hecho con ☕</p>
+  <p style="color:#555">v1.0.0</p>
+</footer>
+
+</body>
+</html>
