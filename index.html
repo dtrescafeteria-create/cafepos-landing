@@ -169,7 +169,14 @@
   .feature-card:hover { border-color: rgba(124,58,237,0.5); transform: translateY(-4px); }
   .feature-icon { width: 44px; height: 44px; background: rgba(124,58,237,0.15); color: var(--purple-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.1rem; }
   .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.45rem; }
-  .feature-card p { color: var(--muted); font-size: 0.86rem; line-height: 1.6; font-weight: 300; }
+  .feature-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; font-weight: 300; }
+  .features-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .feature-card { display: flex; flex-direction: column; padding: 1.8rem; }
+  .feature-card h3 { font-size: 1.08rem; }
+  .feature-card.is-wide { grid-column: span 2; }
+  @media (max-width: 700px) { .feature-card.is-wide { grid-column: span 1; } }
+  .mini-mockup { margin-top: auto; padding-top: 1.1rem; }
+  .mini-mockup svg { width: 100%; height: auto; display: block; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); }
 
   /* DOWNLOAD */
   .download { background: var(--bg); border-top: 1px solid var(--border); }
@@ -346,11 +353,28 @@
   <h2 class="section-title">Todo lo que necesita tu local</h2>
   <p class="section-subtitle">Diseñado para ser simple y rápido. Sin curva de aprendizaje, listo desde el primer día.</p>
   <div class="features-grid">
-    <div class="feature-card">
+    <div class="feature-card is-wide">
       <div class="feature-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M13 3 4 14h7l-1 7 9-11h-7z"/></svg></div>
       <h3>Pedidos en tiempo real</h3>
-      <p>Las comandas llegan al instante a cocina y barra por WebSockets. Sin retrasos ni confusiones.</p>
-    </div>
+      <p>Las comandas viajan al instante de sala a cocina y barra por WebSockets. Cada producto va a su destino, se marca como listo uno a uno y sala recibe el aviso cuando la mesa esta completa. Sin retrasos ni papeles.</p>
+      <div class="mini-mockup">
+        <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="92" height="100" rx="8" fill="#111122" stroke="#7C3AED" stroke-opacity="0.4"/>
+          <text x="20" y="28" fill="#a78bfa" font-family="sans-serif" font-size="9" font-weight="700">SALA</text>
+          <rect x="18" y="36" width="76" height="12" rx="3" fill="#1a1a2e"/>
+          <rect x="18" y="52" width="76" height="12" rx="3" fill="#1a1a2e"/>
+          <rect x="18" y="68" width="60" height="12" rx="3" fill="#1a1a2e"/>
+          <rect x="18" y="90" width="76" height="12" rx="3" fill="#7C3AED" fill-opacity="0.6"/>
+          <path d="M108 60 L140 60" stroke="#7C3AED" stroke-width="2" stroke-dasharray="4 3"/>
+          <path d="M138 55 L144 60 L138 65" fill="none" stroke="#7C3AED" stroke-width="2"/>
+          <rect x="148" y="10" width="76" height="100" rx="8" fill="#111122" stroke="#DC2626" stroke-opacity="0.4"/>
+          <text x="156" y="28" fill="#f87171" font-family="sans-serif" font-size="9" font-weight="700">COCINA</text>
+          <rect x="156" y="36" width="60" height="10" rx="3" fill="#1a1a2e"/>
+          <rect x="156" y="50" width="60" height="10" rx="3" fill="#1a1a2e"/>
+          <circle cx="212" cy="41" r="3" fill="#22c55e"/>
+          <rect x="232" y="10" width="78" height="100" rx="8" fill="#111122" stroke="#059669" stroke-opacity="0.4"/>
+          <text x="240" y="28" fill="#34d399" font-family="sans-serif" font-size="9" font-weight="700">BARRA</text>
+          <rect x="240" y="36" width="62"
     <div class="feature-card">
       <div class="feature-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
       <h3>Mesas y salas</h3>
@@ -376,10 +400,21 @@
       <h3>División de cuenta</h3>
       <p>Reparte el importe de una mesa entre varios comensales con un calculador integrado.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card is-wide">
       <div class="feature-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M7 9h6"/></svg></div>
       <h3>Pantalla publicitaria</h3>
-      <p>Muestra promociones a tus clientes con carrusel de slides, marquesina, hora y temperatura.</p>
+      <p>Convierte una pantalla en un escaparate digital: carrusel de slides con promociones, marquesina de texto, hora y temperatura en vivo. Logo configurable, colores por slide y cierre remoto. Ideal para una TV de cara al cliente.</p>
+      <div class="mini-mockup">
+        <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="300" height="84" rx="8" fill="#0a0a12" stroke="#7C3AED" stroke-opacity="0.4"/>
+          <circle cx="40" cy="40" r="16" fill="#7C3AED" fill-opacity="0.25"/>
+          <rect x="68" y="30" width="130" height="12" rx="3" fill="#1a1a2e"/>
+          <rect x="68" y="48" width="90" height="10" rx="3" fill="#1a1a2e"/>
+          <text x="290" y="26" fill="#a78bfa" font-family="sans-serif" font-size="9" text-anchor="end" font-weight="700">21 EUR</text>
+          <rect x="10" y="98" width="300" height="12" rx="0" fill="#7C3AED" fill-opacity="0.5"/>
+          <text x="18" y="107" fill="#fff" font-family="sans-serif" font-size="7">Promo del dia  ·  18:24  ·  22 grados</text>
+        </svg>
+      </div>
     </div>
     <div class="feature-card">
       <div class="feature-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M10 5a2 2 0 0 1 4 0c3 1 4 3 4 6v4l2 2H4l2-2v-4c0-3 1-5 4-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></div>
@@ -391,10 +426,24 @@
       <h3>PWA y apps nativas</h3>
       <p>Funciona desde el navegador en cualquier dispositivo, con apps de Android y Windows.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card is-wide">
       <div class="feature-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 13h10l2-9H6.5"/></svg></div>
       <h3>Lista de compra</h3>
-      <p>Control de aprovisionamiento en tiempo real entre barra, cocina y administración. Marca lo gastado, calcula el coste estimado y guarda el historial de pedidos, con envío por WhatsApp o PDF.</p>
+      <p>Control de aprovisionamiento en tiempo real entre barra, cocina y administracion. El admin define productos y su precio de coste; barra y cocina marcan lo que se ha gastado y la lista calcula el total estimado. Se envia a admin, queda en el historial y se comparte por WhatsApp o PDF.</p>
+      <div class="mini-mockup">
+        <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="300" height="100" rx="8" fill="#111122" stroke="#0EA5E9" stroke-opacity="0.4"/>
+          <text x="22" y="30" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700">Por comprar</text>
+          <rect x="22" y="42" width="180" height="10" rx="3" fill="#1a1a2e"/>
+          <rect x="250" y="40" width="20" height="14" rx="3" fill="#1a1a2e"/><text x="276" y="51" fill="#8c8c9e" font-family="sans-serif" font-size="9">x2</text>
+          <rect x="22" y="60" width="150" height="10" rx="3" fill="#1a1a2e"/>
+          <rect x="250" y="58" width="20" height="14" rx="3" fill="#1a1a2e"/><text x="276" y="69" fill="#8c8c9e" font-family="sans-serif" font-size="9">x1</text>
+          <rect x="22" y="78" width="120" height="10" rx="3" fill="#1a1a2e"/>
+          <rect x="250" y="76" width="20" height="14" rx="3" fill="#1a1a2e"/><text x="276" y="87" fill="#8c8c9e" font-family="sans-serif" font-size="9">x3</text>
+          <text x="22" y="103" fill="#8c8c9e" font-family="sans-serif" font-size="9">Total estimado</text>
+          <text x="298" y="103" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="end">48,60 EUR</text>
+        </svg>
+      </div>
     </div>
   </div>
 </section>
